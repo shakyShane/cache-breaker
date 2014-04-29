@@ -1,13 +1,44 @@
 "use strict";
 
 var path = require("path");
+var _    = require("lodash");
+
+var defaults = {
+    position: "append"
+};
+
+/**
+ * @param {string} src
+ * @param {string|array} matcher
+ * @param {object} [config]
+ * @returns {string}
+ */
+exports.breakCache = function (src, matcher, config) {
+
+    var opts = mergeOptions(defaults, config);
+
+    function replacer(src, match) {
+        var replacer = _getReplacer(opts.position);
+        return src.replace(_getRegex(match, opts.position), replacer);
+    }
+
+    if (Array.isArray(matcher)) {
+        matcher.forEach(function (match) {
+            src = replacer(src, match);
+        });
+    } else {
+        return replacer(src, matcher);
+    }
+
+    return src;
+};
 
 /**
  * @param {string} matcher
  * @param {string} position
  * @returns {RegExp}
  */
-exports._getRegex = function (matcher, position) {
+function _getRegex(matcher, position) {
 
     function fullMatcher() {
         return new RegExp("(('|\")(.+?)?)("+matcher+")([\\w\\?=]*)('|\")", "g");
@@ -33,12 +64,14 @@ exports._getRegex = function (matcher, position) {
     if (regexs[position]) {
         return regexs[position]();
     }
-};
+}
 
 /**
- * @returns {string}
+ * @param {string} type
+ * @returns {string|function}
+ * @private
  */
-exports._getReplacer = function (type) {
+function _getReplacer(type) {
 
     function replace (string) {
         var timestamp = new Date().getTime().toString();
@@ -58,36 +91,14 @@ exports._getReplacer = function (type) {
         overwrite: replace("$1%time%$2")
     };
 
-    return templates[type]
-};
+    return templates[type];
+}
 
 /**
- * @param {string} src
- * @param {string|array} matcher
- * @param {object} [config]
- * @returns {string}
+ * @param {object} defaults
+ * @param {object} config
+ * @returns {object}
  */
-exports.addTimestamp = function (src, matcher, config) {
-
-    if (!config) {
-        config = {
-            position: "append"
-        };
-    }
-
-    function replacer(src, match) {
-        var replacer = exports._getReplacer(config.position);
-        return src.replace(exports._getRegex(match, config.position), replacer);
-    }
-
-    if (Array.isArray(matcher)) {
-        matcher.forEach(function (match) {
-            src = replacer(src, match);
-        });
-    } else {
-        return replacer(src, matcher);
-    }
-
-    return src;
-
-};
+function mergeOptions(defaults, config) {
+    return _.merge(defaults, config);
+}
