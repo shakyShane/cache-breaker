@@ -71,8 +71,7 @@ exports.addTimestamp = function (src, matcher, config) {
 
     if (!config) {
         config = {
-            position: "append",
-            overwrite: false
+            position: "append"
         };
     }
 
