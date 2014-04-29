@@ -1,6 +1,7 @@
 #Cache Breaking Tasks
 
-**Note: This modules does nothing with the file system, so Grunt & Gulp Plugins will be coming soon**
+**Note: This modules does nothing with the file system, that means you'll have to read/write files yourself, or wait for
+the Grunt & Gulp Plugins**
 
 
 ##Install
@@ -55,3 +56,10 @@ cacheBreaker.addTimestamp(string, 'style.*.css', {position: 'overwrite'});
 // <link href="/style.56432352.css" />
 
 ```
+
+##TODO
+
+- [ ] Grunt Plugin
+- [ ] Gulp Plugin
+- [ ] Accept file src for creating MD5 hash
+- [ ] Allow user-specified string in place of timestamp
