@@ -1,4 +1,4 @@
-#Cache Breaking Tasks
+#Cache Breaking Tasks [![Build Status](https://travis-ci.org/shakyShane/cache-breaker.svg?branch=master)](https://travis-ci.org/shakyShane/cache-breaker)
 
 **Note: This modules does nothing with the file system, that means you'll have to read/write files yourself, or wait for
 the Grunt & Gulp Plugins**
