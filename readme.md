@@ -23,7 +23,7 @@ var cacheBreaker = require("cache-breaker");
 ```js
 var string   = '<link href="/style.css" /><link href="/style2.css" />';
 
-cacheBreaker.addTimestamp(string, ['style.css', 'style2.css']);
+cacheBreaker.breakCache(string, ['style.css', 'style2.css']);
 
 // output
 // <link href="/style.css?rel=23452341" /><link href="/style2.css?rel=23452341" />
@@ -35,7 +35,7 @@ cacheBreaker.addTimestamp(string, ['style.css', 'style2.css']);
 ```js
 var string   = '<link href="/style.css" />';
 
-cacheBreaker.addTimestamp(string, 'style.css', {position: 'filename'});
+cacheBreaker.breakCache(string, 'style.css', {position: 'filename'});
 
 // output
 // <link href="/style.56432352.css" />
@@ -50,7 +50,7 @@ Use this when you have rewrite rules in place.
 ```js
 var string   = '<link href="/style.2452345.css" />';
 
-cacheBreaker.addTimestamp(string, 'style.*.css', {position: 'overwrite'});
+cacheBreaker.breakCache(string, 'style.*.css', {position: 'overwrite'});
 
 // output
 // <link href="/style.56432352.css" />
@@ -61,5 +61,5 @@ cacheBreaker.addTimestamp(string, 'style.*.css', {position: 'overwrite'});
 
 - [ ] Grunt Plugin
 - [ ] Gulp Plugin
-- [ ] Accept file src for creating MD5 hash
-- [ ] Allow user-specified string in place of timestamp
+- [x] Accept file src for creating MD5 hash
+- [x] Allow user-specified string in place of timestamp
