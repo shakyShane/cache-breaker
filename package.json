@@ -1,6 +1,6 @@
 {
   "name": "cache-breaker",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Cache Breaking Tasks",
   "main": "index.js",
   "scripts": {
@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/shakyShane/cache-breaker",
   "dependencies": {
-    "lodadash": "2.2.1"
+    "lodash": "2.2.1"
   },
   "devDependencies": {
     "chai": "^1.9.1",
