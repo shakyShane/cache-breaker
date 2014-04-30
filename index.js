@@ -45,12 +45,22 @@ exports.breakCache = function (src, matcher, config) {
  * @returns {*}
  */
 function _getReplacement(replacement, config) {
+
     if (replacement === "time") {
         return new Date().getTime().toString();
     }
 
     if (replacement === "md5") {
-        return md5(config.src, config.length || 10);
+        if (typeof config.src === "string") {
+            return md5(config.src, config.length || 10);
+        } else {
+            if (config.src.path) {
+                var content = getFileContents(config.src.path);
+                if (content) {
+                    return md5(content, config.length || 10);
+                }
+            }
+        }
     }
 
     return replacement;
@@ -117,6 +127,17 @@ function _getReplacer(type, replacement) {
     return templates[type];
 }
 exports._getReplacer = _getReplacer;
+
+/**
+ * @param filepath
+ * @returns {*}
+ */
+function getFileContents(filepath) {
+    var path = require("path");
+    var fs   = require("fs");
+    filepath = path.resolve(filepath);
+    return fs.readFileSync(filepath, 'utf-8');
+}
 
 /**
  * @param {object} defaults

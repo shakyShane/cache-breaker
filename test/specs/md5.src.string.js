@@ -1,10 +1,7 @@
 var index = require('../../index');
 
-var sinon  = require('sinon');
 var assert = require('chai').assert;
 
-
-// HTML = <link href="/css/style.css" />
 // HASH = 7d6bc4c9c1
 
 describe('Using an MD5 hash of content as the cache-breaker', function () {
