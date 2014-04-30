@@ -3,8 +3,12 @@
 var path = require("path");
 var _    = require("lodash");
 
+/**
+ * Default Options
+ */
 var defaults = {
-    position: "append"
+    position: "append",
+    replacement: "time"
 };
 
 /**
@@ -15,11 +19,13 @@ var defaults = {
  */
 exports.breakCache = function (src, matcher, config) {
 
-    var opts = mergeOptions(defaults, config);
+    var opts = mergeOptions(_.cloneDeep(defaults), config);
 
     function replacer(src, match) {
-        var replacer = _getReplacer(opts.position);
-        return src.replace(_getRegex(match, opts.position), replacer);
+        var replacement = _getReplacement(opts.replacement, opts);
+        var replacer    = _getReplacer(opts.position, replacement);
+        var regex       = _getRegex(match, opts.position);
+        return src.replace(regex, replacer);
     }
 
     if (Array.isArray(matcher)) {
@@ -32,6 +38,23 @@ exports.breakCache = function (src, matcher, config) {
 
     return src;
 };
+
+/**
+ * @param {string|function} replacement
+ * @param config
+ * @returns {*}
+ */
+function _getReplacement(replacement, config) {
+    if (replacement === "time") {
+        return new Date().getTime().toString();
+    }
+
+    if (replacement === "md5") {
+        return md5(config.src, config.length || 10);
+    }
+
+    return replacement;
+}
 
 /**
  * @param {string} matcher
@@ -69,13 +92,13 @@ function _getRegex(matcher, position) {
 /**
  * @param {string} type
  * @returns {string|function}
+ * @param {string|function} replacement
  * @private
  */
-function _getReplacer(type) {
+function _getReplacer(type, replacement) {
 
     function replace (string) {
-        var timestamp = new Date().getTime().toString();
-        return string.replace("%time%", timestamp);
+        return string.replace("%time%", replacement);
     }
 
     var templates = {
@@ -93,6 +116,7 @@ function _getReplacer(type) {
 
     return templates[type];
 }
+exports._getReplacer = _getReplacer;
 
 /**
  * @param {object} defaults
@@ -101,4 +125,13 @@ function _getReplacer(type) {
  */
 function mergeOptions(defaults, config) {
     return _.merge(defaults, config);
+}
+
+/**
+ * @param src
+ */
+function md5(src, length) {
+    var crypto = require('crypto');
+    var hash   = crypto.createHash('md5').update(src, 'utf8').digest('hex');
+    return hash.slice(0, length);
 }
