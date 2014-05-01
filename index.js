@@ -77,6 +77,11 @@ function _getRegex(matcher, position) {
         return new RegExp("(('|\")(.+?)?)("+matcher+")([\\w\\?=]*)('|\")", "g");
     }
 
+    function prepareString(seg) {
+        var result = seg.replace(/\./g, "\\.");
+        return "(" + result + ")";
+    }
+
     /**
      * @type {{overwrite: overwrite, filename: fullMatcher, append: fullMatcher}}
      */
@@ -84,11 +89,10 @@ function _getRegex(matcher, position) {
         overwrite: function () {
 
             var split  = matcher.split("*");
-            var before = "(%s)".replace("%s", split[0]);
-            var after  = "(%s)".replace("%s", split[1]);
+            var before = prepareString(split[0]);
+            var after  = prepareString(split[1]);
 
-            return new RegExp(before + "(?:.+?)" + after);
-
+            return new RegExp(before + "(?:.+?)" + after, "g");
         },
         filename: fullMatcher,
         append: fullMatcher

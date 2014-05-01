@@ -101,4 +101,85 @@ describe('Appending with a query string', function () {
 
         assert.equal(actual, expected);
     });
+    it('should rewrite', function () {
+
+        clock.tick(321);
+
+        var test     = '<script src="/js/dist/modernizr/modernizr.combined.min.js"></script>';
+        var actual   = index.breakCache(test, 'modernizr.combined.min.js');
+        var expected = '<script src="/js/dist/modernizr/modernizr.combined.min.js?rel=321"></script>';
+
+        assert.equal(actual, expected);
+    });
+    it('should rewrite', function () {
+
+        clock.tick(321);
+
+        var test     = '<script src="/js/dist/modernizr/modernizr.combined.min.js"></script>';
+        var actual   = index.breakCache(test, 'modernizr.combined.min.js', {position: 'filename'});
+        var expected = '<script src="/js/dist/modernizr/modernizr.combined.min.321.js"></script>';
+
+        assert.equal(actual, expected);
+    });
+    it('should rewrite', function () {
+
+        clock.tick(321);
+
+        var test     = '<script src="/js/dist/modernizr/modernizr.combined.min.js"></script>';
+        var actual   = index.breakCache(test, 'modernizr.combined.*.js', {position: 'overwrite'});
+        var expected = '<script src="/js/dist/modernizr/modernizr.combined.321.js"></script>';
+
+        assert.equal(actual, expected);
+    });
+    it('should rewrite', function () {
+
+        clock.tick(321);
+
+        var test     = '<script src="<?= App::serve("/js/dist/modernizr/modernizr.combined.min.js"); ?>"></script>';
+        var actual   = index.breakCache(test, 'modernizr.combined.*.js', {position: 'overwrite'});
+        var expected = '<script src="<?= App::serve("/js/dist/modernizr/modernizr.combined.321.js"); ?>"></script>';
+
+        assert.equal(actual, expected);
+    });
+
+
+    it('should rewrite', function () {
+
+        clock.tick(321);
+
+        var test = '<script src="/js/dist/modernizr/modernizr/modernizr.combined.min.js"></script>';
+        test    += '<script src="/js/dist/modernizr/modernizr/modernizr.combined.min.js"></script>';
+        test    += '<script src="/js/dist/modernizr/modernizr/modernizr.combined.min.js"></script>';
+
+        var actual   = index.breakCache(test, 'modernizr.*.min.js', {position: 'overwrite'});
+
+        var expected = '<script src="/js/dist/modernizr/modernizr/modernizr.321.min.js"></script>';
+        expected    += '<script src="/js/dist/modernizr/modernizr/modernizr.321.min.js"></script>';
+        expected    += '<script src="/js/dist/modernizr/modernizr/modernizr.321.min.js"></script>';
+
+        assert.equal(actual, expected);
+    });
+
+
+    it('should rewrite', function () {
+
+        clock.tick(321);
+
+        var test     = '<script src="/js/dist/modernizr/modernizr.min.js"></script>';
+        var actual   = index.breakCache(test, 'modernizr.min.js', {position: 'filename'});
+        var expected = '<script src="/js/dist/modernizr/modernizr.min.321.js"></script>';
+
+        assert.equal(actual, expected);
+    });
+
+    it('should rewrite', function () {
+
+        clock.tick(321);
+
+        var test     = '<script src="/js/dist/modernizr/modernizr.min.js"></script>';
+        var actual   = index.breakCache(test, 'modernizr.min.js', {position: 'append'});
+        var expected = '<script src="/js/dist/modernizr/modernizr.min.js?rel=321"></script>';
+
+        assert.equal(actual, expected);
+    });
 });
