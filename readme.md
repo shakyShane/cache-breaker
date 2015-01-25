@@ -59,7 +59,7 @@ cacheBreaker.breakCache(string, 'style.*.css', {position: 'overwrite'});
 
 ##TODO
 
-- [ ] Grunt Plugin
+- [x] [Grunt Plugin](https://github.com/shakyShane/grunt-cache-breaker)
 - [ ] Gulp Plugin
 - [x] Accept file src for creating MD5 hash
 - [x] Allow user-specified string in place of timestamp
