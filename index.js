@@ -21,16 +21,16 @@ exports.breakCache = function (src, matcher, config) {
 
     var opts = mergeOptions(_.cloneDeep(defaults), config);
 
-    function replacer(src, match) {
-        var replacement = _getReplacement(opts.replacement, opts);
+    function replacer(src, match, index) {
+        var replacement = _getReplacement(opts.replacement, opts, index);
         var replacer    = _getReplacer(opts.position, replacement);
         var regex       = _getRegex(match, opts.position);
         return src.replace(regex, replacer);
     }
 
     if (Array.isArray(matcher)) {
-        matcher.forEach(function (match) {
-            src = replacer(src, match);
+        matcher.forEach(function (match, index) {
+            src = replacer(src, match, index);
         });
     } else {
         return replacer(src, matcher);
@@ -42,9 +42,10 @@ exports.breakCache = function (src, matcher, config) {
 /**
  * @param {string|function} replacement
  * @param config
+ * @param {number} index (can be null/undefined)
  * @returns {*}
  */
-function _getReplacement(replacement, config) {
+function _getReplacement(replacement, config, index) {
 
     if (replacement === "time") {
         return new Date().getTime().toString();
@@ -55,7 +56,12 @@ function _getReplacement(replacement, config) {
             return md5(config.src, config.length || 10);
         } else {
             if (config.src.path) {
-                var content = getFileContents(config.src.path);
+                var content;
+                if (Array.isArray(config.src.path)) {
+                    content = getFileContents(config.src.path[index || 0]);
+                } else {
+                    content = getFileContents(config.src.path);
+                }
                 if (content) {
                     return md5(content, config.length || 10);
                 }
