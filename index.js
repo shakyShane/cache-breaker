@@ -74,7 +74,7 @@ function _getReplacement(replacement, config) {
 function _getRegex(matcher, position) {
 
     function fullMatcher() {
-        return new RegExp("(('|\")(.+?)?)("+matcher+")([\\w\\?=]*)('|\")", "g");
+        return new RegExp("(('|\")(.+?)?)("+matcher+")([\\w\\?=]*)('|\"|\\\\\")", "g");
     }
 
     function prepareString(seg) {
