@@ -22,14 +22,14 @@
   },
   "homepage": "https://github.com/shakyShane/cache-breaker",
   "dependencies": {
-    "lodash": "2.2.1"
+    "lodash": "^4.17.11"
   },
   "devDependencies": {
     "chai": "^1.9.1",
-    "mocha": "^1.18.2",
+    "gulp": "^4.0.2",
+    "gulp-jshint": "^2.1.0",
     "gulp-util": "^2.2.14",
-    "gulp": "^3.6.2",
-    "gulp-jshint": "^1.5.5",
+    "mocha": "^6.1.4",
     "sinon": "^1.9.1"
   }
 }
